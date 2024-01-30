@@ -10,5 +10,6 @@ anyhow = "1.0"
 chrono = "0.4"
 tokio = { version = "1.18", features = ["rt", "macros", "rt-multi-thread"] }
 clap = { version = "4", features = ["derive", "env"] }
-concordium-rust-sdk = "3"
+concordium-rust-sdk = "4"
 my-contract = { path = "../" }
+tonic = { version = "0.10", features = ["tls"] }

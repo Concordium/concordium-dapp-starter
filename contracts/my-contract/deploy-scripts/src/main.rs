@@ -3,12 +3,8 @@ use anyhow::{Context, Error};
 use clap::Parser;
 use concordium_rust_sdk::{
     common::types::Amount,
-    smart_contracts::{
-        common::{self as contracts_common},
-        types::{OwnedContractName, OwnedParameter, OwnedReceiveName},
-    },
     types::{
-        smart_contracts::{ModuleReference, WasmModule},
+        smart_contracts::{ContractName, ModuleReference, OwnedParameter, ReceiveName, WasmModule},
         transactions,
         transactions::{send::GivenEnergy, InitContractPayload},
     },
@@ -19,6 +15,9 @@ use std::{
     io::Cursor,
     path::{Path, PathBuf},
 };
+
+const INIT_METHOD_NAME: &str = "init_my_contract"; // Example
+const INCREMENT_RECEIVE_NAME: &str = "my_contract.increment"; // Example
 
 /// Reads the wasm module from a given file path.
 fn get_wasm_module(file: &Path) -> Result<WasmModule, Error> {
@@ -61,12 +60,26 @@ struct App {
 async fn main() -> Result<(), Error> {
     let app: App = App::parse();
 
-    let concordium_client = v2::Client::new(app.url).await?;
+    // Create a secure channel when the provided endpoint uses https.
+    let endpoint = if app
+        .url
+        .uri()
+        .scheme()
+        .map_or(false, |x| x == &v2::Scheme::HTTPS)
+    {
+        app.url
+            .tls_config(tonic::transport::channel::ClientTlsConfig::new())
+            .context("Unable to construct TLS configuration for the Concordium API.")?
+    } else {
+        app.url
+    }
+    .connect_timeout(std::time::Duration::from_secs(5))
+    .timeout(std::time::Duration::from_secs(10));
 
+    let concordium_client = v2::Client::new(endpoint).await?;
     let mut deployer = Deployer::new(concordium_client, &app.key_file)?;
 
     let mut modules_deployed: Vec<ModuleReference> = Vec::new();
-
     for contract in app.module {
         let wasm_module = get_wasm_module(contract.as_path())?;
 
@@ -86,15 +99,14 @@ async fn main() -> Result<(), Error> {
     // Write your own deployment/initialization script below. An example is given
     // here.
 
-    let param: OwnedParameter = OwnedParameter::empty(); // Example
-
-    let init_method_name: &str = "init_my_contract"; // Example
+    let init_parameter = my_contract::InitParameter { initial_value: 0 }; // Example
+    let contract_name = ContractName::new(INIT_METHOD_NAME)?;
 
     let payload = InitContractPayload {
-        init_name: OwnedContractName::new(init_method_name.into())?,
-        amount: Amount::from_micro_ccd(0),
+        init_name: contract_name.to_owned(),
+        amount: Amount::zero(),
         mod_ref: modules_deployed[0],
-        param,
+        param: OwnedParameter::from_serial(&init_parameter)?,
     }; // Example
 
     let init_result: InitResult = deployer
@@ -102,17 +114,15 @@ async fn main() -> Result<(), Error> {
         .await
         .context("Failed to initialize the contract.")?; // Example
 
-    let input_parameter = my_contract::InitParameter { initial_value: 0 };
+    let increment_parameter = my_contract::IncrementParameter { increment_by: 1 };
+    let increment_receive_name = ReceiveName::new(INCREMENT_RECEIVE_NAME)?;
 
     // Create a successful transaction.
-
-    let bytes = contracts_common::to_bytes(&input_parameter); // Example
-
     let update_payload = transactions::UpdateContractPayload {
-        amount: Amount::from_ccd(0),
+        amount: Amount::zero(),
         address: init_result.contract_address,
-        receive_name: OwnedReceiveName::new_unchecked("my_contract.receive".to_string()),
-        message: bytes.try_into()?,
+        receive_name: increment_receive_name.to_owned(),
+        message: OwnedParameter::from_serial(&increment_parameter)?,
     }; // Example
 
     // The transaction costs on Concordium have two components, one is based on the size of the

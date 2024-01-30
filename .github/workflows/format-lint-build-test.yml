@@ -6,9 +6,13 @@ on:
     pull_request:
         branches:
             - main
+        types:
+          - opened
+          - reopened
+          - synchronize
+          - ready_for_review
 env:
     NODE_VERSION: 'lts/*'
-    RUST_FMT: nightly-2023-04-01
     RUST_VERSION: "1.75"
     CARGO_CONCORDIUM_VERSION: "3.2"
     MY_CONTRACT_PATH: contracts/my-contract
@@ -23,7 +27,7 @@ jobs:
             - name: Install Rust toolchain with rustfmt available
               uses: actions-rust-lang/setup-rust-toolchain@v1
               with:
-                    toolchain: ${{ env.RUST_FMT }}
+                    toolchain: ${{ env.RUST_VERSION }}
                     components: rustfmt
             - name: Run cargo fmt
               working-directory: ${{ env.MY_CONTRACT_PATH }}
@@ -37,7 +41,7 @@ jobs:
           - name: Install Rust toolchain with rustfmt available
             uses: actions-rust-lang/setup-rust-toolchain@v1
             with:
-                  toolchain: ${{ env.RUST_FMT }}
+                  toolchain: ${{ env.RUST_VERSION }}
                   components: rustfmt
           - name: Run cargo fmt
             working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
@@ -57,7 +61,7 @@ jobs:
                 components: clippy
             - name: Run cargo clippy
               working-directory: ${{ env.MY_CONTRACT_PATH }}
-              run: cargo clippy -- -D warnings
+              run: cargo clippy --locked -- -D warnings
     clippy-my-contract-deploy-scripts:
         name: Run linter on smart contract deploy scripts
         runs-on: ubuntu-latest
@@ -72,7 +76,7 @@ jobs:
                 components: clippy
             - name: Run cargo clippy
               working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
-              run: cargo clippy -- -D warnings
+              run: cargo clippy --locked -- -D warnings
     prettier:
         name: Check formatting frontend
         runs-on: ubuntu-latest
