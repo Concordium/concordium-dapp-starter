@@ -1,0 +1,12 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./contracts/my-contract/Cargo.toml",
+        "./contracts/my-contract/deploy-scripts/Cargo.toml"
+    ],
+    "[typescript][typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+}

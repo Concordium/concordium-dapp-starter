@@ -1,0 +1,17 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "concordium",
+			"command": "build",
+			"cwd": "contracts/my-contract",
+			"args": [
+				"--out",
+				"concordium-out/module.wasm.v1",
+				"--schema-embed"
+			],
+			"problemMatcher": [],
+			"label": "contracts/my-contract: Build smart contract"
+		}
+	]
+}

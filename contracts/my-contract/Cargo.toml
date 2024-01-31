@@ -1,0 +1,25 @@
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name = "my-contract"
+version = "0.1.0"
+edition = "2021"
+authors = []
+description = ""
+
+[features]
+default = ["std"]
+std = ["concordium-std/std"]
+
+[dependencies]
+concordium-std = { version = "9", default-features = false }
+
+[dev-dependencies]
+concordium-smart-contract-testing = "4.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+opt-level = "s"
+codegen-units = 1
