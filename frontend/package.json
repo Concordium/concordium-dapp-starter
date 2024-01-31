@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint src",
-    "format": "prettier --check src",
+    "lint-check": "eslint",
+    "format-check": "prettier --check .",
+    "format-fix": "prettier --write .",
     "preview": "vite preview",
     "generate": "ccd-js-gen --module ../contracts/my-contract/concordium-out/module.wasm.v1 --out-dir ./generated --output-type TypeScript --ts-nocheck"
   },

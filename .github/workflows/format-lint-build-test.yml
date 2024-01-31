@@ -1,158 +1,103 @@
 name: Format, Lint, Build and Test
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
-        types:
-          - opened
-          - reopened
-          - synchronize
-          - ready_for_review
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 env:
-    NODE_VERSION: 'lts/*'
-    RUST_VERSION: "1.75"
-    CARGO_CONCORDIUM_VERSION: "3.2"
-    MY_CONTRACT_PATH: contracts/my-contract
-    MY_CONTRACT_DEPLOY_SCRIPT_PATH: contracts/my-contract/deploy-scripts
+  NODE_VERSION: "lts/*"
+  RUST_VERSION: "1.75"
+  CARGO_CONCORDIUM_VERSION: "3.2"
+  MY_CONTRACT_PATH: contracts/my-contract
+  MY_CONTRACT_DEPLOY_SCRIPT_PATH: contracts/my-contract/deploy-scripts
 jobs:
-    rustfmt-my-contract:
-        name: Check formatting smart contracts
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Install Rust toolchain with rustfmt available
-              uses: actions-rust-lang/setup-rust-toolchain@v1
-              with:
-                    toolchain: ${{ env.RUST_VERSION }}
-                    components: rustfmt
-            - name: Run cargo fmt
-              working-directory: ${{ env.MY_CONTRACT_PATH }}
-              run: cargo fmt --check
-    rustfmt-my-contract-deploy-scripts:
-      name: Check formatting smart contract deploy scripts
-      runs-on: ubuntu-latest
-      steps:
-          - name: Checkout project
-            uses: actions/checkout@v4
-          - name: Install Rust toolchain with rustfmt available
-            uses: actions-rust-lang/setup-rust-toolchain@v1
-            with:
-                  toolchain: ${{ env.RUST_VERSION }}
-                  components: rustfmt
-          - name: Run cargo fmt
-            working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
-            run: cargo fmt --check
-    clippy-my-contract:
-        name: Run linter on smart contracts
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Install Rust toolchain with clippy available
-              uses: actions-rust-lang/setup-rust-toolchain@v1
-              with:
-                uses: actions-rust-lang/setup-rust-toolchain@v1
-                toolchain: ${{ env.RUST_VERSION }}
-                target: wasm32-unknown-unknown
-                components: clippy
-            - name: Run cargo clippy
-              working-directory: ${{ env.MY_CONTRACT_PATH }}
-              run: cargo clippy --locked -- -D warnings
-    clippy-my-contract-deploy-scripts:
-        name: Run linter on smart contract deploy scripts
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Install Rust toolchain with clippy available
-              uses: actions-rust-lang/setup-rust-toolchain@v1
-              with:
-                toolchain: ${{ env.RUST_VERSION }}
-                target: wasm32-unknown-unknown
-                components: clippy
-            - name: Run cargo clippy
-              working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
-              run: cargo clippy --locked -- -D warnings
-    prettier:
-        name: Check formatting frontend
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Setup Node for frontend
-              uses: actions/setup-node@v4
-              with:
-                node-version: ${{env.NODE_VERSION}}
-                cache: 'npm'
-                cache-dependency-path: frontend/package-lock.json
-            - name: Install NPM dependencies
-              working-directory: frontend
-              run: npm clean-install
-            - name: Run prettier
-              working-directory: frontend
-              run: npm run format
-    eslint:
-        name: Run linter on frontend
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Setup Node for frontend
-              uses: actions/setup-node@v4
-              with:
-                node-version: ${{env.NODE_VERSION}}
-                cache: 'npm'
-                cache-dependency-path: frontend/package-lock.json
-            - name: Install NPM dependencies
-              working-directory: frontend
-              run: npm clean-install
-            - name: Run linter
-              working-directory: frontend
-              run: npm run lint
-    build-and-test:
-        needs: [rustfmt-my-contract, rustfmt-my-contract-deploy-scripts, clippy-my-contract, clippy-my-contract-deploy-scripts, prettier, eslint]
-        runs-on: ubuntu-latest
-        name: Build and test everything
-        steps:
-            - name: Checkout project
-              uses: actions/checkout@v4
-            - name: Install Rust toolchain
-              uses: actions-rust-lang/setup-rust-toolchain@v1
-              with:
-                target: wasm32-unknown-unknown
-                toolchain: ${{ env.RUST_VERSION }}
+  rustfmt-clippy:
+    name: Formatting and linting smart contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain with rustfmt available
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          target: wasm32-unknown-unknown
+          components: rustfmt, clippy
+      - name: Run cargo fmt - ${{ env.MY_CONTRACT_PATH }}
+        working-directory: ${{ env.MY_CONTRACT_PATH }}
+        run: cargo fmt --check
+      - name: Run cargo fmt - ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
+        working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
+        run: cargo fmt --check
+      - name: Run cargo clippy - ${{ env.MY_CONTRACT_PATH }}
+        working-directory: ${{ env.MY_CONTRACT_PATH }}
+        run: cargo clippy --locked -- -D warnings
+      - name: Run cargo clippy - ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
+        working-directory: ${{ env.MY_CONTRACT_DEPLOY_SCRIPT_PATH }}
+        run: cargo clippy --locked -- -D warnings
+  prettier-eslint:
+    name: Formatting and linting frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Setup Node for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install NPM dependencies
+        working-directory: frontend
+        run: npm clean-install
+      - name: Run prettier
+        working-directory: frontend
+        run: npm run format-check
+      - name: Run eslint
+        working-directory: frontend
+        run: npm run lint-check
+  build-and-test:
+    name: Build and test everything
+    needs: [rustfmt-clippy, prettier-eslint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: wasm32-unknown-unknown
+          toolchain: ${{ env.RUST_VERSION }}
+      - name: Install cargo-concordium from crates.io
+        uses: baptiste0928/cargo-install@v2
+        with:
+          crate: cargo-concordium
+          version: ${{env.CARGO_CONCORDIUM_VERSION}}
+      - name: Build and test smart contract
+        working-directory: ${{ env.MY_CONTRACT_PATH }}
+        run: cargo concordium test --out "./concordium-out/module.wasm.v1"
 
-            - name: Install cargo-concordium from crates.io
-              uses: baptiste0928/cargo-install@v2
-              with:
-                crate: cargo-concordium
-                version: ${{env.CARGO_CONCORDIUM_VERSION}}
-
-            - name: Build and test smart contract
-              working-directory: ${{ env.MY_CONTRACT_PATH }}
-              run: cargo concordium test --out "./concordium-out/module.wasm.v1"
-
-            # Frontend build and test
-            - name: Setup Node for frontend
-              uses: actions/setup-node@v4
-              with:
-                node-version: ${{env.NODE_VERSION}}
-                cache: 'npm'
-                cache-dependency-path: frontend/package-lock.json
-
-            - name: Install NPM dependencies
-              working-directory: frontend
-              run: npm clean-install
-
-            # This must be run after building the smart contracts.
-            - name: Generate smart contract clients
-              working-directory: frontend
-              run: npm run generate
-
-            - name: Build all libraries and samples
-              working-directory: frontend
-              run: npm run build
+      # Frontend build and test
+      - name: Setup Node for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install NPM dependencies
+        working-directory: frontend
+        run: npm clean-install
+      # This must be run after building the smart contracts.
+      - name: Generate smart contract clients
+        working-directory: frontend
+        run: npm run generate
+      - name: Build all libraries and samples
+        working-directory: frontend
+        run: npm run build
