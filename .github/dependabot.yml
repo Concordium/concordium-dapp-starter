@@ -6,12 +6,12 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/frontend" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
   - package-ecosystem: "cargo" # See documentation for possible values
     directory: "/contracts/my-contract" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
   - package-ecosystem: "cargo" # See documentation for possible values
     directory: "/contracts/my-contract/deploy-scripts" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
