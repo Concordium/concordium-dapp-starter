@@ -13,7 +13,7 @@
     "generate": "ccd-js-gen --module ../contracts/my-contract/concordium-out/module.wasm.v1 --out-dir ./generated --output-type TypeScript --ts-nocheck"
   },
   "dependencies": {
-    "@concordium/web-sdk": "^7.2.0",
+    "@concordium/web-sdk": "^7.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
