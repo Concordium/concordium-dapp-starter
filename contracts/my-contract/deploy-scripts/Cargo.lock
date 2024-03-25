@@ -598,9 +598,9 @@ checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
 
 [[package]]
 name = "concordium-contracts-common"
-version = "9.0.0"
+version = "9.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27f49ffe8ff944ec174f597b3f0d1f84e77e6dd3e8eb2fad3bdd08c8d1dcf7c9"
+checksum = "14dfda3a8d06d2d72e74aad650757680a82df4e528c18c66c49efe9f60b646c5"
 dependencies = [
  "base64",
  "bs58",
@@ -620,9 +620,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-contracts-common-derive"
-version = "4.0.1"
+version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f9db2f3ebe6616b1658ec10acc3e9ca31f65824e3ab5ad88f3cf2532e25aed2"
+checksum = "ee3482ffacf3c18133be976c1b874b6e87e018ac0316e9385888b43df07fa39c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -631,9 +631,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-rust-sdk"
-version = "4.2.0"
+version = "4.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "104d243a251ee51d2b8f104050fe3a3582dc476ea5e3faa3952bd7d680ef5803"
+checksum = "2d0798ed24edd3a8212ba2f3d6c771635cb3561c327dc03463efa09fa9bd6083"
 dependencies = [
  "aes-gcm",
  "anyhow",
@@ -664,9 +664,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-smart-contract-engine"
-version = "4.0.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23751642d6672291e4feac02252f5f1d258cd3c093873a7f59f3d9a7cc165f82"
+checksum = "ec03be6a4a56c0501cf9225d135aaa6c155228039efde27d6551814bc6776db1"
 dependencies = [
  "anyhow",
  "byteorder",
@@ -711,9 +711,9 @@ dependencies = [
 
 [[package]]
 name = "concordium_base"
-version = "4.0.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00b92eba25481b3cec616943c433d780d1ca6db02cf2bc9be8d8d192d54dedb8"
+checksum = "5a3dd5a345b61f667a8cb6a361f3e88268bf15b68eabab7f78e27ce513b20175"
 dependencies = [
  "aes",
  "anyhow",
