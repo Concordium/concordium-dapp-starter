@@ -92,3 +92,31 @@ npm run build
 ```
 
 This will bundle the project into `frontend/dist` directory.
+
+### Format code
+
+To check for formatting issues run the following command from the `frontend` directory:
+
+```bash
+npm run format-check
+```
+
+To automatically fix formatting issues run the following command from the `frontend` directory:
+
+```bash
+npm run format-fix
+```
+
+### Lint code
+
+To check for linting issues run the following command from the `frontend` directory:
+
+```bash
+npm run lint-check
+```
+
+To automatically fix linting issues run the following command from the `frontend` directory:
+
+```bash
+npm run lint-fix
+```
