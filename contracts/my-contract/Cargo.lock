@@ -610,9 +610,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-std"
-version = "10.0.0"
+version = "10.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "645eeaa2c81e2daa6289ef1cfcca8170419feecdb7d93d5421113880553361df"
+checksum = "8879375db69e8b0f9918faef9b349427c5ae8ba45b31870946780d16bcfe7fe7"
 dependencies = [
  "concordium-contracts-common",
 ]
