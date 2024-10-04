@@ -479,9 +479,9 @@ checksum = "fd16c4719339c4530435d38e511904438d07cce7950afa3718a84ac36c10e89e"
 
 [[package]]
 name = "chrono"
-version = "0.4.31"
+version = "0.4.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f2c685bad3eb3d45a01354cedb7d5faa66194d1d58ba6e267a8de788f79db38"
+checksum = "a21f936df1771bf62b77f047b726c4625ff2e8aa607c01ec06e5a05bd8463401"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
@@ -489,7 +489,7 @@ dependencies = [
  "num-traits",
  "serde",
  "wasm-bindgen",
- "windows-targets 0.48.5",
+ "windows-targets 0.52.0",
 ]
 
 [[package]]
@@ -504,9 +504,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-contracts-common"
-version = "9.0.0"
+version = "9.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27f49ffe8ff944ec174f597b3f0d1f84e77e6dd3e8eb2fad3bdd08c8d1dcf7c9"
+checksum = "8bacf3a0689d3ac154085e322eb98b0db16caa61436421d991d54ba25aaf0da3"
 dependencies = [
  "base64",
  "bs58",
@@ -526,9 +526,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-contracts-common-derive"
-version = "4.0.1"
+version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f9db2f3ebe6616b1658ec10acc3e9ca31f65824e3ab5ad88f3cf2532e25aed2"
+checksum = "ee3482ffacf3c18133be976c1b874b6e87e018ac0316e9385888b43df07fa39c"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -537,9 +537,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-rust-sdk"
-version = "4.0.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d98ad09fd9f5496180d1fe79b4e71ab69a88d58f2c509ccaa47659ab712681db"
+checksum = "f7a70dae6be9a40cae34506d4d464f891db0deeb3a15fb1a2a20a3d46b2a4cfc"
 dependencies = [
  "aes-gcm",
  "anyhow",
@@ -570,9 +570,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-smart-contract-engine"
-version = "4.0.0"
+version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23751642d6672291e4feac02252f5f1d258cd3c093873a7f59f3d9a7cc165f82"
+checksum = "acd7ceba6727800db45bb7fffdda4c45377ea7682779eb8b2cf0df7f377161f3"
 dependencies = [
  "anyhow",
  "byteorder",
@@ -595,9 +595,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-smart-contract-testing"
-version = "4.1.0"
+version = "4.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "947f4357eb3da00b4de20e845e36e91e51914f4a624aaacba111504f08f6146a"
+checksum = "e7d2a1fb209bf0718cb2eff7b4d8bfb413007d02c875adf0f2a2034f7f720515"
 dependencies = [
  "anyhow",
  "concordium-rust-sdk",
@@ -619,9 +619,9 @@ dependencies = [
 
 [[package]]
 name = "concordium-wasm"
-version = "4.0.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "26a581ef6ae1b23e149eaf5ed1e43c1da877ded9ae0de4989cd71b76d25c67d7"
+checksum = "7d051a3ec0f7fbacc57e7f1b1bfa2d5d8a268354f5bbe37962390a00959adaa1"
 dependencies = [
  "anyhow",
  "concordium-contracts-common",
@@ -632,9 +632,9 @@ dependencies = [
 
 [[package]]
 name = "concordium_base"
-version = "4.0.0"
+version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "00b92eba25481b3cec616943c433d780d1ca6db02cf2bc9be8d8d192d54dedb8"
+checksum = "2b7719963a1f1e3f1dfc2614daad47b91ad5a32104d7ab67dcf962627fdc0a6d"
 dependencies = [
  "aes",
  "anyhow",
@@ -2184,6 +2184,7 @@ dependencies = [
  "num_cpus",
  "pin-project-lite",
  "socket2",
+ "tokio-macros",
  "windows-sys",
 ]
 
@@ -2195,6 +2196,17 @@ checksum = "30b74022ada614a1b4834de765f9bb43877f910cc8ce4be40e89042c9223a8bf"
 dependencies = [
  "pin-project-lite",
  "tokio",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
 ]
 
 [[package]]
