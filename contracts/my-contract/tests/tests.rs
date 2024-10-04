@@ -1,5 +1,4 @@
 use concordium_smart_contract_testing::*;
-use my_contract;
 
 /// A test account.
 const ALICE: AccountAddress = AccountAddress([0u8; 32]);
