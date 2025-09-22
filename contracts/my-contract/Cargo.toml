@@ -15,7 +15,7 @@ std = ["concordium-std/std"]
 concordium-std = { version = "10", default-features = false }
 
 [dev-dependencies]
-concordium-smart-contract-testing = "4.1"
+concordium-smart-contract-testing = "4.2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
