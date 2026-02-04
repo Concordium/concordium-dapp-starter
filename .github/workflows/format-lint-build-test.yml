@@ -85,6 +85,8 @@ jobs:
         run: cargo concordium test --out "./concordium-out/module.wasm.v1"
 
       # Frontend build and test
+      - name: Enable Corepack
+        run: corepack enable
       - name: Setup Node for frontend
         uses: actions/setup-node@v4
         with:
