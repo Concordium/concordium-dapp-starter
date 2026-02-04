@@ -91,9 +91,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: "yarn"
-          cache-dependency-path: frontend/yarn.lock
-      - name: Install NPM dependencies
+      - name: Cache Yarn 4
+        uses: actions/cache@v4
+        with:
+          path: frontend/.yarn/cache
+          key: ${{ runner.os }}-yarn4-${{ hashFiles('frontend/yarn.lock') }}
+      - name: Install yarn dependencies
         working-directory: frontend
         run: yarn install --immutable
       # This must be run after building the smart contracts.
