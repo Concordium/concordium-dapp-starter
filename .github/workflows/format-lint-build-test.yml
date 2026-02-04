@@ -91,15 +91,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{env.NODE_VERSION}}
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
+          cache: "yarn"
+          cache-dependency-path: frontend/yarn.lock
       - name: Install NPM dependencies
         working-directory: frontend
-        run: npm clean-install
+        run: yarn install --immutable
       # This must be run after building the smart contracts.
       - name: Generate smart contract clients
         working-directory: frontend
-        run: npm run generate
+        run: yarn generate
       - name: Build all libraries and samples
         working-directory: frontend
-        run: npm run build
+        run: yarn build
