@@ -1,9 +1,7 @@
 name: Check dapp-starter with npm audit
 on:
-  push:
-    branches:
-      - main
-      - COR-2064/npm-audit-slack
+  schedule:
+    - cron: '0 12 * * *' # run every day at 12
   # Allows us to run the workflow manually from the Actions tab
   workflow_dispatch:
 
