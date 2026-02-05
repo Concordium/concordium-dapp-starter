@@ -1,0 +1,76 @@
+name: Check dapp-starter with npm audit
+on:
+  schedule:
+    - cron: '0 12 * * *' # run every day at 12
+  # Allows us to run the workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "lts/*"
+
+jobs:
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        packages:
+          - frontend
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Setup Node for frontend
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{env.NODE_VERSION}}
+          cache: "npm"
+          cache-dependency-path: ${{matrix.packages}}/package-lock.json
+
+      - name: Install NPM dependencies
+        working-directory: ${{matrix.packages}}
+        run: npm clean-install
+      
+      - name: Audit - Critical vulnerabilities
+        id: audit_critical
+        working-directory: ${{ matrix.packages }}
+        run: |
+          AUDIT_OUTPUT=$(npm audit --audit-level critical || true)
+          echo "$AUDIT_OUTPUT"
+          if echo "$AUDIT_OUTPUT" | grep -Ei "severity: critical" > /dev/null; then
+            echo "Critical vulnerabilities found!"
+            exit 1
+          else
+            echo "No critical vulnerabilities found."
+            exit 0
+          fi
+
+      - name: Audit - High vulnerabilities
+        id: audit_high
+        working-directory: ${{ matrix.packages }}
+        run: |
+          AUDIT_OUTPUT=$(npm audit --audit-level high || true)
+          echo "$AUDIT_OUTPUT"
+          if echo "$AUDIT_OUTPUT" | grep -Ei "severity: high" > /dev/null; then
+            echo "High vulnerabilities found!"
+            exit 1
+          else
+            echo "No high vulnerabilities found."
+            exit 0
+          fi
+
+      - name: Report Status to Slack # This step only runs if a previous step failed
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SECURITY_ADVISORIES_SLACK_WEBHOOK_URL }}
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_TITLE: 'Yarn Audit detected vulnerabilities on dapp-starter/${{ matrix.packages }}'
+          SLACK_MESSAGE: |
+            Yarn audit detected Critical or High vulnerabilities for *dapp-starter/${{ matrix.packages }}*. 
+            Please check the GitHub Actions logs.
+            *View Logs:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Click here to open the Summary page>
+          SLACK_USERNAME: YarnAuditBot                
